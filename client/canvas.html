@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pixel-Leinwand</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    main { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+    header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    #board { width: 100%; aspect-ratio: 1; display: block; border-radius: 10px; touch-action: manipulation; cursor: crosshair; }
+    .pick { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; }
+    .pick .swatch { width: 100%; height: auto; aspect-ratio: 1; }
+    .preview { display: inline-block; width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--line); vertical-align: -2px; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <div class="eyebrow">Schaufenster</div>
+        <h1>Pixel-<span>Leinwand</span></h1>
+      </div>
+      <span class="badge" id="connection">verbinde…</span>
+    </header>
+    <nav id="tabs"></nav>
+
+    <canvas id="board" width="640" height="640" aria-label="Leinwand mit 32 mal 32 Pixeln. Tippe auf ein Feld, um es auszuwählen."></canvas>
+
+    <section class="panel" aria-live="polite">
+      <p class="status" id="status">Verbinde mit der Leinwand…</p>
+      <div class="pick" id="palette" aria-label="Farbe wählen"></div>
+      <div class="row">
+        <button class="primary" id="btn-paint" type="button" disabled>Pixel setzen</button>
+      </div>
+      <p class="muted" id="painters"></p>
+    </section>
+
+    <p class="muted" style="font-size:13px">Die ganze Stadt malt ein Bild: Jedes Handy darf ein Pixel setzen und muss dann kurz warten. Das Bild leuchtet auf LED-Panels im Schaufenster.</p>
+  </main>
+  <script type="module" src="canvas.js"></script>
+</body>
+</html>

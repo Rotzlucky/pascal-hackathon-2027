@@ -5,6 +5,7 @@ import { CELLS } from "./shared/game.js";
 import { PAINT_COLORS } from "./shared/session.js";
 import { createFacade } from "./facade-view.js";
 import { connect } from "./transport.js";
+import { renderTabs } from "./nav.js";
 
 const $ = (id) => document.getElementById(id);
 let state = null;
@@ -13,6 +14,7 @@ let notice = null;
 let paintColor = PAINT_COLORS[0];
 let paintReadyAt = 0;
 
+renderTabs($("tabs"), "player.html");
 const facade = createFacade($("facade"), { onTap });
 const conn = connect({
   role: "player",

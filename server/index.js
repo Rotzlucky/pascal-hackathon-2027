@@ -6,13 +6,16 @@
 // Configuration via environment variables, see README.md.
 
 import http from "node:http";
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import { extname, join, normalize, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
 import { networkInterfaces } from "node:os";
 import { WebSocketServer } from "ws";
 import { Session } from "../shared/session.js";
+import { CanvasSession } from "../shared/canvas.js";
+import { starterPicture } from "../shared/canvas-start.js";
 import { createLamps } from "./lamps/index.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -52,7 +55,7 @@ const server = http.createServer(async (req, res) => {
   }
   if (url.pathname === "/info") {
     res.writeHead(200, { "content-type": "application/json" });
-    res.end(JSON.stringify({ joinUrl: joinUrl() }));
+    res.end(JSON.stringify({ joinUrl: joinUrl(), canvasUrl: new URL("canvas", joinUrl()).href }));
     return;
   }
   const file = resolvePath(url.pathname);
@@ -76,12 +79,40 @@ const session = new Session({
   paintCooldownMs: Number(process.env.PAINT_COOLDOWN_SECONDS ?? 60) * 1000,
 });
 
+// Pixel canvas for the shop window. The picture is saved to a file so a restart keeps it.
+const CANVAS_FILE = process.env.CANVAS_FILE ?? join(ROOT, "data", "canvas.json");
+function loadCanvas() {
+  try {
+    return JSON.parse(readFileSync(CANVAS_FILE, "utf8")).pixels;
+  } catch {
+    return starterPicture();
+  }
+}
+let saveTimer = null;
+const canvas = new CanvasSession({
+  pixels: loadCanvas(),
+  cooldownMs: Number(process.env.CANVAS_COOLDOWN_SECONDS ?? 30) * 1000,
+  onChange(pixels) {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      await mkdir(dirname(CANVAS_FILE), { recursive: true });
+      await writeFile(CANVAS_FILE, JSON.stringify({ savedAt: new Date().toISOString(), pixels }));
+    }, 2000);
+  },
+});
+
+// Each page connects to one "room": the Rathaus game or the canvas.
+const ROOMS = { rathaus: session, canvas };
+const ROLES = ["player", "facade", "display"];
+
 const wss = new WebSocketServer({ server, path: "/ws", maxPayload: 1024 });
 wss.on("connection", (ws, req) => {
   const id = randomUUID();
-  const role = new URL(req.url, "http://localhost").searchParams.get("role") === "facade" ? "facade" : "player";
+  const params = new URL(req.url, "http://localhost").searchParams;
+  const room = ROOMS[params.get("room")] ?? session;
+  const role = ROLES.includes(params.get("role")) ? params.get("role") : "player";
   const send = (msg) => ws.readyState === ws.OPEN && ws.send(JSON.stringify(msg));
-  session.addClient(id, send, role);
+  room.addClient(id, send, role);
 
   // Simple flood protection: at most 10 messages per second per connection.
   let budget = 10;
@@ -90,14 +121,14 @@ wss.on("connection", (ws, req) => {
   ws.on("message", (data) => {
     if (budget-- <= 0) return;
     try {
-      session.handle(id, JSON.parse(data));
+      room.handle(id, JSON.parse(data));
     } catch {
       // ignore malformed messages
     }
   });
   ws.on("close", () => {
     clearInterval(refill);
-    session.removeClient(id);
+    room.removeClient(id);
   });
 });
 
@@ -107,5 +138,6 @@ server.listen(PORT, () => {
   console.log(`Rathaus Lichtspiel läuft auf http://localhost:${PORT}`);
   console.log(`  Spielseite:        ${joinUrl()}`);
   console.log(`  Virtuelle Fassade: http://localhost:${PORT}/facade`);
+  console.log(`  Pixel-Leinwand:    ${new URL("canvas", joinUrl()).href}  (Schaufenster: /panel)`);
   console.log(`  Lampen:            ${lamps.description}`);
 });

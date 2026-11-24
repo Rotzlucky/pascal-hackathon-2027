@@ -39,6 +39,16 @@ The door is the status light: amber while a game runs, green when it is solved.
 - One person plays at a time; others join the queue. After 90 s without a tap the next person gets their turn.
 - **Paint mode** when nobody plays: every phone may colour one window per minute. Colours only, no text.
 
+## Pixel canvas for a shop window ("Pixel-Leinwand")
+
+A second game on its own page: the town paints a 32×32 picture together. Every phone picks a field and a colour and sets one pixel, then waits 30 seconds. The picture is meant for LED panels in a shop window, viewed from 1–3 m: 8 panels of 64×32 LEDs (P4, 4 mm pitch) in a 2×4 layout give 128×128 LEDs on about 51 × 51 cm, so one canvas pixel is 4×4 LEDs.
+
+- Phone page: `/canvas` (tabs switch between the Rathaus puzzle and the canvas)
+- Virtual LED panels with QR code: `/panel`
+- The canvas starts with four original retro characters (robot, slime, cat, rocket), drawn as text in `shared/canvas-start.js`.
+- The server saves the picture to `data/canvas.json`, so a restart keeps it. Delete the file to start over.
+- Driving real panels is not built yet. The panels would join as a `display` client of the `canvas` room, like `/panel` does.
+
 ## Three ways to run it
 
 | | What you need | Lamps |
@@ -56,7 +66,7 @@ npm install
 npm start
 ```
 
-and open http://localhost:8080/demo. One page shows the facade and two phones. `client/demo.html` runs the same `Session` the Pi runs and connects the phone frames through a `BroadcastChannel` instead of a WebSocket.
+and open http://localhost:8080/demo. One page shows the facade and two phones; the "Pixel-Leinwand" tab (or `/demo#leinwand`) shows the shop window canvas. `client/demo.html` runs the same `Session` the Pi runs and connects the phone frames through a `BroadcastChannel` instead of a WebSocket.
 
 ### 2. Laptop demo with real phones
 
@@ -95,7 +105,9 @@ See [docs/raspberry-pi.md](docs/raspberry-pi.md).
 | `WLED_LED_MAP` | `0,1,…,16` | LED number for each window, comma separated |
 | `PUBLIC_URL` | LAN address | Address in the QR code, e.g. the tunnel URL |
 | `IDLE_SECONDS` | `90` | Turn ends after this long without a tap |
-| `PAINT_COOLDOWN_SECONDS` | `60` | Wait time between two paint taps per phone |
+| `PAINT_COOLDOWN_SECONDS` | `60` | Wait time between two paint taps per phone (Rathaus paint mode) |
+| `CANVAS_COOLDOWN_SECONDS` | `30` | Wait time between two pixels per phone on the canvas |
+| `CANVAS_FILE` | `data/canvas.json` | Where the canvas picture is saved |
 
 ## Project layout
 
@@ -103,10 +115,14 @@ See [docs/raspberry-pi.md](docs/raspberry-pi.md).
 shared/game.js        Game rules: facade, tap rules, puzzle generator (pure functions)
 shared/session.js     Players, queue, paint mode, what the facade shows
 shared/zigbee.js      Lamp commands in zigbee2mqtt format
+shared/canvas.js      Pixel canvas: picture, colours, cooldown per phone
+shared/canvas-start.js  Start picture with four retro characters
 server/index.js       Web server + WebSocket for the Pi or a laptop
 server/lamps/         Lamp adapters: console, mqtt (Zigbee), wled (cardboard model)
 client/player.html    Phone page
 client/facade.html    Virtual facade with QR code
+client/canvas.html    Phone page for the pixel canvas
+client/panel.html     Virtual LED panels for the shop window, with QR code
 client/demo.html      Everything on one page, without a server
 deploy/               systemd service for the Pi
 ```
@@ -115,7 +131,11 @@ deploy/               systemd service for the Pi
 
 Phone → server: `{"type":"join"}`, `{"type":"leave"}`, `{"type":"tap","cell":7}`, `{"type":"new"}`, `{"type":"reset"}`, `{"type":"hint"}`, `{"type":"rule","rule":"plus"}`, `{"type":"paint","cell":7,"color":"#ff5a5f"}`
 
-Server → phone: `state` (facade colours, mode, game, queue, the phone's own status), `hint` (a useful window), `timeout` (turn ended because of inactivity).
+Pages connect to `/ws?room=rathaus` (default) or `/ws?room=canvas`.
+
+Canvas: phone → server `{"type":"paint","cell":527,"color":"#e8262b"}`; server → phone `canvas` (whole picture on connect), `pixel` (one changed pixel), `you` (seconds until the next pixel), `painters` (how many phones are connected).
+
+Rathaus, server → phone: `state` (facade colours, mode, game, queue, the phone's own status), `hint` (a useful window), `timeout` (turn ended because of inactivity).
 
 ## Tests
 

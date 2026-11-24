@@ -27,6 +27,12 @@ p { margin: 0; }
 .muted { color: var(--muted); }
 .eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 
+/* Tabs between the two games */
+.tabs { display: flex; gap: 4px; padding: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; }
+.tabs a, .tabs button { flex: 1; text-align: center; padding: 8px 12px; border-radius: 999px; color: var(--muted); text-decoration: none; font: 500 14px var(--font); border: 0; background: transparent; }
+.tabs [aria-current="page"], .tabs [aria-selected="true"] { background: #24305a; color: var(--ink); }
+.tabs a:focus-visible, .tabs button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
 /* Facade */
 .facade { width: 100%; height: auto; display: block; }
 .win { outline: none; }

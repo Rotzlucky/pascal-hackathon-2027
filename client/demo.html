@@ -15,7 +15,8 @@
     figcaption { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
     iframe { border: 1px solid var(--line); background: var(--sky); display: block; }
     .wall iframe { width: 100%; height: 640px; border-radius: 14px; }
-    .phone iframe { width: 340px; max-width: 100%; height: 700px; border-radius: 28px; border-width: 8px; border-color: #2a2f45; }
+    .phone { flex: 0 1 340px; min-width: 260px; }
+    .phone iframe { width: 100%; height: 700px; border-radius: 28px; border-width: 8px; border-color: #2a2f45; }
   </style>
 </head>
 <body>
@@ -23,9 +24,15 @@
     <div class="intro">
       <div class="eyebrow">Demo ohne Raspberry Pi</div>
       <h1>Rathaus <span>Lichtspiel</span></h1>
-      <p class="muted">Links die Fassade, rechts zwei Handys. Die Spiel-Logik, die sonst auf dem Raspberry Pi läuft, läuft hier in dieser Seite. Die Handys reden mit ihr genau so, wie sie später mit dem Pi reden. Tippe bei „Handy A“ auf <b>Mitspielen</b>, dann bei „Handy B“: B landet in der Schlange.</p>
+      <p class="muted">Links das, was leuchtet, rechts zwei Handys. Die Spiel-Logik, die sonst auf dem Raspberry Pi läuft, läuft hier in dieser Seite. Die Handys reden mit ihr genau so, wie sie später mit dem Pi reden.</p>
     </div>
-    <div class="stage">
+    <div class="tabs" role="tablist" style="max-width:420px">
+      <button type="button" role="tab" id="tab-rathaus" aria-controls="stage-rathaus" aria-selected="true">Rathaus-Rätsel</button>
+      <button type="button" role="tab" id="tab-leinwand" aria-controls="stage-leinwand" aria-selected="false">Pixel-Leinwand</button>
+    </div>
+    <p class="muted" id="hint-rathaus">Tippe bei „Handy A“ auf <b>Mitspielen</b>, dann bei „Handy B“: B landet in der Schlange.</p>
+    <p class="muted" id="hint-leinwand" hidden>Tippe auf einem Handy ein Feld an, wähle eine Farbe und setze das Pixel. Es erscheint sofort im Schaufenster und auf dem anderen Handy.</p>
+    <div class="stage" id="stage-rathaus" role="tabpanel">
       <figure class="wall">
         <figcaption>Fassade (so leuchten die Lampen)</figcaption>
         <iframe src="facade.html?demo&amp;log" title="Virtuelle Fassade"></iframe>
@@ -41,12 +48,45 @@
         </figure>
       </div>
     </div>
+    <div class="stage" id="stage-leinwand" role="tabpanel" hidden>
+      <figure class="wall">
+        <figcaption>Schaufenster (LED-Panels)</figcaption>
+        <iframe src="panel.html?demo" title="Schaufenster mit LED-Panels"></iframe>
+      </figure>
+      <div class="phones">
+        <figure class="phone">
+          <figcaption>Handy A</figcaption>
+          <iframe src="canvas.html?demo" title="Handy A, Pixel-Leinwand"></iframe>
+        </figure>
+        <figure class="phone">
+          <figcaption>Handy B</figcaption>
+          <iframe src="canvas.html?demo" title="Handy B, Pixel-Leinwand"></iframe>
+        </figure>
+      </div>
+    </div>
   </main>
   <script type="module">
     import { Session } from "./shared/session.js";
+    import { CanvasSession } from "./shared/canvas.js";
+    import { starterPicture } from "./shared/canvas-start.js";
     import { hostDemo } from "./transport.js";
     // Shorter waiting times than on the Pi, so the demo is quick to try.
-    hostDemo(new Session({ idleMs: 60_000, paintCooldownMs: 5_000 }));
+    hostDemo({
+      rathaus: new Session({ idleMs: 60_000, paintCooldownMs: 5_000 }),
+      canvas: new CanvasSession({ pixels: starterPicture(), cooldownMs: 3_000 }),
+    });
+
+    // Tabs: #leinwand opens the canvas directly.
+    const show = (name) => {
+      for (const n of ["rathaus", "leinwand"]) {
+        document.getElementById(`stage-${n}`).hidden = n !== name;
+        document.getElementById(`hint-${n}`).hidden = n !== name;
+        document.getElementById(`tab-${n}`).setAttribute("aria-selected", String(n === name));
+      }
+    };
+    document.getElementById("tab-rathaus").onclick = () => { history.replaceState(null, "", "#rathaus"); show("rathaus"); };
+    document.getElementById("tab-leinwand").onclick = () => { history.replaceState(null, "", "#leinwand"); show("leinwand"); };
+    show(location.hash === "#leinwand" ? "leinwand" : "rathaus");
   </script>
 </body>
 </html>

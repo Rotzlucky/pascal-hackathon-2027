@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Schaufenster-Leinwand</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    main { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+    @media (max-width: 760px) { main { grid-template-columns: minmax(0, 1fr); } }
+    #leds { width: 100%; max-width: 640px; aspect-ratio: 1; display: block; background: #050608; border-radius: 6px; box-shadow: 0 0 0 10px #1c1f29; }
+    aside { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+    #qr { background: #fff; border-radius: 12px; padding: 12px; width: 100%; max-width: 200px; }
+    #qr svg { width: 100%; height: auto; display: block; }
+  </style>
+</head>
+<body>
+  <main>
+    <canvas id="leds" width="768" height="768" aria-label="LED-Panels im Schaufenster"></canvas>
+    <aside>
+      <div>
+        <div class="eyebrow">Schaufenster · <span class="badge" id="connection">verbinde…</span></div>
+        <h1>Pixel-<span>Leinwand</span></h1>
+      </div>
+      <p class="muted">So sieht das Bild auf den LED-Panels aus: 8 Panels mit je 64 × 32 LEDs, zusammen 128 × 128 LEDs auf etwa 51 × 51 cm. Ein Pixel der Leinwand sind 4 × 4 LEDs.</p>
+      <p class="big" id="painters" style="font-size:18px;font-weight:600"></p>
+      <div id="join" hidden>
+        <p class="muted">Mitmalen: QR-Code scannen</p>
+        <div id="qr"></div>
+        <p class="muted" id="url" style="font-size:13px;word-break:break-all"></p>
+      </div>
+    </aside>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+  <script type="module" src="panel.js"></script>
+</body>
+</html>

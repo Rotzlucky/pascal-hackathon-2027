@@ -1,0 +1,73 @@
+/* Night scene, single theme on purpose: the game is about lit windows in the dark. */
+:root {
+  --sky: #0c1325;
+  --sky-2: #1b2649;
+  --ink: #eceff7;
+  --muted: #a1a9c2;
+  --panel: #141c33;
+  --line: #2a355a;
+  --lit: #ffcf6e;
+  --ok: #4fd68f;
+  --focus: #8fb8ff;
+  --font: "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  background: radial-gradient(120% 80% at 30% 0%, var(--sky-2), var(--sky) 70%) fixed, var(--sky);
+  color: var(--ink);
+  font: 15px/1.5 var(--font);
+  padding: 16px max(16px, env(safe-area-inset-right)) 24px max(16px, env(safe-area-inset-left));
+}
+h1 { font-size: 24px; line-height: 1.15; margin: 0; text-wrap: balance; }
+h1 span { color: var(--lit); }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* Facade */
+.facade { width: 100%; height: auto; display: block; }
+.win { outline: none; }
+.win[role="button"] { cursor: pointer; }
+.win .glass { transition: fill .2s ease; }
+.win.on .glass, .door.on { filter: url(#glow); }
+.win .bars { stroke: rgba(30, 30, 38, .55); stroke-width: 2; fill: none; }
+.win .frame { fill: none; stroke: #d8d4c8; stroke-width: 3; }
+.win .ring { fill: none; stroke: transparent; stroke-width: 3; }
+.win[role="button"]:hover .frame { stroke: #fff; }
+.win:focus-visible .ring { stroke: var(--focus); stroke-dasharray: 5 4; }
+.win.hint .ring { stroke: var(--focus); animation: pulse 1s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .2; } }
+
+/* Controls */
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+button {
+  font: 500 15px var(--font); color: var(--ink); background: transparent;
+  border: 1px solid var(--line); border-radius: 999px; padding: 9px 16px; cursor: pointer;
+}
+button:hover { border-color: var(--muted); }
+button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+button.primary { background: var(--lit); border-color: var(--lit); color: #1d1606; font-weight: 600; }
+button[aria-pressed="true"] { background: #24305a; border-color: var(--focus); }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stat b { display: block; font-size: 26px; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat small { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+.swatch { width: 40px; height: 40px; padding: 0; border-radius: 50%; border: 2px solid var(--line); }
+.swatch[aria-pressed="true"] { border-color: #fff; box-shadow: 0 0 0 3px var(--focus); background-clip: padding-box; }
+.swatch.off { background: #10162a; font-size: 12px; color: var(--muted); }
+.status { font-size: 16px; }
+.status.won { color: var(--ok); font-weight: 600; }
+.badge { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+.badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #d65a5a; }
+.badge.online::before { background: var(--ok); }
+.log { font: 12px/1.6 var(--mono); background: #0b1122; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 0; list-style: none; overflow-x: auto; min-height: 9em; }
+.log li { white-space: nowrap; color: #c8d3f5; }
+.log li + li { opacity: .6; }
+[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .win.hint .ring { animation: none; }
+  .win .glass { transition: none; }
+}

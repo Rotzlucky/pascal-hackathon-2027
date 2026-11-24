@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Licht an im Rathaus</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    main { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+    header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <div class="eyebrow">Altes Rathaus Grevenbroich</div>
+        <h1>Licht an im <span>Rathaus</span></h1>
+      </div>
+      <span class="badge" id="connection">verbinde…</span>
+    </header>
+
+    <div id="facade"></div>
+
+    <section class="panel" aria-live="polite">
+      <p class="status" id="status">Verbinde mit dem Rathaus…</p>
+
+      <div id="game" hidden>
+        <div class="stats">
+          <div class="stat"><b id="level">1</b><small>Level</small></div>
+          <div class="stat"><b id="moves">0</b><small>Tipps</small></div>
+          <div class="stat"><b id="best">0</b><small>Bestwert</small></div>
+        </div>
+      </div>
+      <div class="row" id="game-buttons" hidden>
+        <button class="primary" id="btn-new" type="button">Neues Rätsel</button>
+        <button id="btn-reset" type="button">Von vorn</button>
+        <button id="btn-hint" type="button">Tipp zeigen</button>
+      </div>
+      <div class="row" id="rules" hidden aria-label="Regel: was schaltet ein Tipp um?">
+        <button type="button" data-rule="plus">Kreuz ✚</button>
+        <button type="button" data-rule="x">Diagonal ✕</button>
+        <button type="button" data-rule="col">Ganze Spalte</button>
+      </div>
+
+      <div id="paint" hidden>
+        <p class="muted" id="paint-hint">Farbe wählen, dann auf ein Fenster tippen.</p>
+        <div class="row" id="palette" style="margin-top:10px"></div>
+      </div>
+
+      <div class="row">
+        <button class="primary" id="btn-join" type="button" hidden>Mitspielen</button>
+        <button id="btn-leave" type="button" hidden>Aufhören</button>
+      </div>
+    </section>
+
+    <p class="muted" style="font-size:13px">Ziel: Alle 17 Fenster sollen leuchten. Jeder Tipp schaltet ein Fenster und seine Nachbarn um. Es spielt immer eine Person, alle anderen schauen zu oder stellen sich an.</p>
+  </main>
+  <script type="module" src="player.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Virtuelle Fassade</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    main { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+    @media (max-width: 760px) { main { grid-template-columns: minmax(0, 1fr); } }
+    aside { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+    #qr { background: #fff; border-radius: 12px; padding: 12px; width: 100%; max-width: 220px; }
+    #qr svg { width: 100%; height: auto; display: block; }
+    .big { font-size: 20px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <main>
+    <div id="facade"></div>
+    <aside>
+      <div>
+        <div class="eyebrow">Virtuelle Fassade · <span class="badge" id="connection">verbinde…</span></div>
+        <h1>Licht an im <span>Rathaus</span></h1>
+      </div>
+      <p class="big" id="mode">…</p>
+      <p class="muted" id="queue"></p>
+      <div id="join" hidden>
+        <p class="muted">Mitspielen: QR-Code scannen</p>
+        <div id="qr"></div>
+        <p class="muted" id="url" style="font-size:13px;word-break:break-all"></p>
+      </div>
+      <div id="log-box" hidden>
+        <p class="eyebrow" style="margin-bottom:6px">Befehle an die Zigbee-Lampen</p>
+        <ol class="log" id="log"></ol>
+      </div>
+    </aside>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+  <script type="module" src="facade.js"></script>
+</body>
+</html>

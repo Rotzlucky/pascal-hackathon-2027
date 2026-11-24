@@ -28,7 +28,7 @@
       <div id="game" hidden>
         <div class="stats">
           <div class="stat"><b id="level">1</b><small>Level</small></div>
-          <div class="stat"><b id="moves">0</b><small>Tipps</small></div>
+          <div class="stat"><b id="moves">0</b><small>Züge</small></div>
           <div class="stat"><b id="best">0</b><small>Bestwert</small></div>
         </div>
       </div>
@@ -37,7 +37,7 @@
         <button id="btn-reset" type="button">Von vorn</button>
         <button id="btn-hint" type="button">Tipp zeigen</button>
       </div>
-      <div class="row" id="rules" hidden aria-label="Regel: was schaltet ein Tipp um?">
+      <div class="row" id="rules" hidden aria-label="Regel: welche Fenster schaltet ein Zug um?">
         <button type="button" data-rule="plus">Kreuz ✚</button>
         <button type="button" data-rule="x">Diagonal ✕</button>
         <button type="button" data-rule="col">Ganze Spalte</button>
@@ -54,7 +54,7 @@
       </div>
     </section>
 
-    <p class="muted" style="font-size:13px">Ziel: Alle 17 Fenster sollen leuchten. Jeder Tipp schaltet ein Fenster und seine Nachbarn um. Es spielt immer eine Person, alle anderen schauen zu oder stellen sich an.</p>
+    <p class="muted" style="font-size:13px">Ziel: Alle 17 Fenster sollen leuchten. Jeder Zug (ein Fenster antippen) schaltet dieses Fenster und seine Nachbarn um. „Tipp zeigen“ verrät dir ein Fenster, das weiterhilft. Es spielt immer eine Person, alle anderen schauen zu oder stellen sich an.</p>
   </main>
   <script type="module" src="player.js"></script>
 </body>

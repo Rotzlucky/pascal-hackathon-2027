@@ -42,7 +42,7 @@ connect({
     if (msg.type !== "state") return;
     facade.show(msg);
     $("mode").textContent = msg.mode === "puzzle"
-      ? msg.game.won ? "Gelöst! 🎉" : `Rätsel läuft · Level ${msg.game.level} · ${msg.game.moves} Tipps`
+      ? msg.game.won ? "Gelöst! 🎉" : `Rätsel läuft · Level ${msg.game.level} · ${msg.game.moves} ${msg.game.moves === 1 ? "Zug" : "Züge"}`
       : "Malmodus: Jeder darf ein Fenster einfärben";
     $("queue").textContent = msg.waiting ? `${msg.waiting} warten auf ihre Runde` : "";
     if (params.has("log") && previous) {

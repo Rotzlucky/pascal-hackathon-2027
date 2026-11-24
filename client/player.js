@@ -69,13 +69,16 @@ document.querySelectorAll("#rules button").forEach((b) => (b.onclick = () => con
   $("palette").appendChild(b);
 });
 
+// "Zug" = one tap on a window. "Tipp" is only used for hints.
+const moves = (n) => `${n} ${n === 1 ? "Zug" : "Zügen"}`;
+
 function statusText() {
   const { you, mode, game, waiting } = state;
   if (you.status === "active") {
     if (game.won) {
       return game.moves <= game.best
-        ? `Geschafft in ${game.moves} Tipps, das ist der Bestwert!`
-        : `Geschafft in ${game.moves} Tipps. Bestwert wäre ${game.best}.`;
+        ? `Geschafft in ${moves(game.moves)}, das ist der Bestwert!`
+        : `Geschafft in ${moves(game.moves)}. Es geht auch in ${moves(game.best)}.`;
     }
     const lit = state.windows.filter(Boolean).length;
     return `Du bist dran! ${lit} von ${CELLS.length} Fenstern leuchten.`;

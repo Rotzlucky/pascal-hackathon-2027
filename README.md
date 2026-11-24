@@ -6,6 +6,8 @@ Built by a parent–child team for the hackathon **„Pascal lights up the city�
 
 **▶ Try the demo:** https://rotzlucky.github.io/pascal-hackathon-2027/ (runs entirely in the browser, no Raspberry Pi needed)
 
+**Concept (German, 2 pages, incl. material list):** [docs/concept/Konzept_Rathaus_Lichtspiel.pdf](docs/concept/Konzept_Rathaus_Lichtspiel.pdf). The source is `docs/concept/konzept.html`, printed to PDF with Chrome.
+
 ## How it works
 
 ```

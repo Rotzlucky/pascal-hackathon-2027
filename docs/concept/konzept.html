@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Rathaus Lichtspiel – Konzept (kurz)</title>
+<style>
+@page { size: A4; margin: 15mm 16mm 16mm 16mm; }
+:root { --ink:#1b2033; --muted:#5d6580; --line:#d9dce6; --lit:#f2b53a; --night:#141c33; --soft:#f5f6fa; }
+* { box-sizing: border-box; }
+body { font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 9.4pt; line-height: 1.42; color: var(--ink); margin: 0; }
+h1 { font-size: 23pt; margin: 0 0 2mm; letter-spacing: -.01em; }
+h1 span { color: #c98a10; }
+h2 { font-size: 12.5pt; margin: 6mm 0 2mm; padding-bottom: 1mm; border-bottom: 1.5px solid var(--ink); break-after: avoid; }
+h3 { font-size: 10pt; margin: 3.5mm 0 1.2mm; break-after: avoid; }
+p { margin: 0 0 2mm; }
+ul { margin: 0 0 2mm; padding-left: 4.5mm; }
+li { margin-bottom: .6mm; }
+.eyebrow { font-size: 8pt; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.lede { font-size: 10.5pt; color: #333a52; max-width: 165mm; }
+.meta { display: flex; gap: 6mm; flex-wrap: wrap; font-size: 8.5pt; color: var(--muted); margin: 2mm 0 1mm; }
+.meta b { color: var(--ink); }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; }
+.cols > * { min-width: 0; }
+table { width: 100%; border-collapse: collapse; font-size: 8.6pt; margin: 1mm 0 2mm; break-inside: auto; }
+th { text-align: left; font-weight: 600; color: var(--muted); font-size: 7.6pt; text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--ink); padding: 1.2mm 1.5mm; }
+td { border-bottom: 1px solid var(--line); padding: 1.3mm 1.5mm; vertical-align: top; }
+tr { break-inside: avoid; }
+td.n, th.n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+tr.sum td { border-bottom: none; border-top: 1.2px solid var(--ink); font-weight: 600; }
+.box { background: var(--soft); border-radius: 2mm; padding: 3mm 4mm; break-inside: avoid; }
+.note { font-size: 8pt; color: var(--muted); }
+.figure { display: grid; grid-template-columns: 70mm 1fr; gap: 7mm; align-items: center; margin-top: 2mm; }
+.flow { display: flex; align-items: stretch; gap: 0; margin: 2mm 0 1mm; }
+.flow .node { flex: 1; border: 1.2px solid var(--ink); border-radius: 2mm; padding: 2mm 2.2mm; font-size: 8pt; line-height: 1.3; background: #fff; }
+.flow .node b { display: block; font-size: 8.6pt; margin-bottom: .5mm; }
+.flow .node.pi { background: #fff7e3; border-color: #c98a10; flex: 1.5; }
+.flow .arrow { align-self: center; padding: 0 1.2mm; font-size: 11pt; color: var(--muted); }
+.tag { display: inline-block; font-size: 7.2pt; font-weight: 600; padding: .3mm 1.6mm; border-radius: 5mm; background: #e7eaf3; color: #34405f; white-space: nowrap; }
+.tag.y { background: #fdeec9; color: #7a5208; }
+.pb { break-before: page; }
+a { color: #9a6a0a; text-decoration: none; }
+footer { margin-top: 5mm; font-size: 7.6pt; color: var(--muted); border-top: 1px solid var(--line); padding-top: 2mm; }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Hackathon „Pascal lights up the city“ · Pascal-Gymnasium Grevenbroich · 12.–13.02.2027</div>
+<h1>Rathaus <span>Lichtspiel</span></h1>
+<p class="lede">Die Fassade des Alten Rathauses am Marktplatz wird zum Spielbrett: Jedes Fenster ist ein farbiger „Pixel“. Passanten scannen einen QR-Code und lösen mit dem Handy ein Licht-Rätsel, bis das ganze Rathaus leuchtet. Zwischen den Spielen malt die Stadt gemeinsam Bilder in die Fenster.</p>
+<div class="meta"><span><b>Team:</b> Vater &amp; Sohn (12)</span><span><b>Stand:</b> 24.11.2026</span><span><b>Status:</b> Spiel-Prototyp im Browser fertig</span></div>
+<div class="meta"><span><b>Code:</b> <a href="https://github.com/Rotzlucky/pascal-hackathon-2027">github.com/Rotzlucky/pascal-hackathon-2027</a></span><span><b>Demo zum Ausprobieren:</b> <a href="https://rotzlucky.github.io/pascal-hackathon-2027/">rotzlucky.github.io/pascal-hackathon-2027</a></span></div>
+
+<h2>1 · Die Idee</h2>
+<div class="figure">
+  <svg viewBox="0 0 280 230" width="70mm" aria-label="Fensterraster der Rathausfassade">
+    <rect x="0" y="0" width="280" height="230" rx="8" fill="#141c33"/>
+    <polygon points="30,70 250,70 225,22 55,22" fill="#262a38"/>
+    <rect x="22" y="70" width="236" height="140" fill="#4b4c57"/>
+    <g font-family="Avenir Next, Helvetica, sans-serif" font-size="9" font-weight="600" text-anchor="middle">
+      <!-- Dach -->
+      <g fill="#f2b53a"><rect x="81" y="32" width="22" height="22" rx="2"/><rect x="129" y="32" width="22" height="22" rx="2"/><rect x="177" y="32" width="22" height="22" rx="2"/></g>
+      <g fill="#1b2033"><text x="92" y="46">01</text><text x="140" y="46">02</text><text x="188" y="46">03</text></g>
+      <!-- 2. OG -->
+      <g fill="#f2b53a"><rect x="31" y="80" width="28" height="32" rx="2"/><rect x="79" y="80" width="28" height="32" rx="2"/><rect x="126" y="80" width="28" height="32" rx="2"/><rect x="173" y="80" width="28" height="32" rx="2"/><rect x="221" y="80" width="28" height="32" rx="2"/></g>
+      <g fill="#1b2033"><text x="45" y="99">04</text><text x="93" y="99">05</text><text x="140" y="99">06</text><text x="187" y="99">07</text><text x="235" y="99">08</text></g>
+      <!-- 1. OG -->
+      <g fill="#10162a" stroke="#d8d4c8" stroke-width="1.5"><rect x="31" y="122" width="28" height="36" rx="2"/><rect x="79" y="122" width="28" height="36" rx="2"/></g>
+      <g fill="#f2b53a"><rect x="126" y="122" width="28" height="36" rx="2"/><rect x="173" y="122" width="28" height="36" rx="2"/><rect x="221" y="122" width="28" height="36" rx="2"/></g>
+      <g><text x="45" y="143" fill="#d8d4c8">09</text><text x="93" y="143" fill="#d8d4c8">10</text><text x="140" y="143" fill="#1b2033">11</text><text x="187" y="143" fill="#1b2033">12</text><text x="235" y="143" fill="#1b2033">13</text></g>
+      <!-- EG -->
+      <g fill="#f2b53a"><rect x="31" y="168" width="28" height="32" rx="2"/><rect x="221" y="168" width="28" height="32" rx="2"/></g>
+      <g fill="#10162a" stroke="#d8d4c8" stroke-width="1.5"><rect x="79" y="168" width="28" height="32" rx="2"/><rect x="173" y="168" width="28" height="32" rx="2"/></g>
+      <path d="M127 210 V180 A13 13 0 0 1 153 180 V210 Z" fill="#4fd68f"/>
+      <g><text x="45" y="187" fill="#1b2033">14</text><text x="93" y="187" fill="#d8d4c8">15</text><text x="187" y="187" fill="#d8d4c8">16</text><text x="235" y="187" fill="#1b2033">17</text></g>
+      <text x="140" y="224" fill="#a1a9c2" font-size="8" font-weight="500">Tür = Statusanzeige</text>
+    </g>
+  </svg>
+  <div>
+    <h3 style="margin-top:0">Die Fassade als Bildschirm</h3>
+    <ul>
+      <li><b>17 Fenster:</b> 3 Dachgauben, je 5 Fenster im 2. und 1. OG, 4 im EG. Die Eingangstür in der Mitte zeigt den Spielstatus (pulsiert = Spiel läuft, grün = gelöst).</li>
+      <li>In jedem Fenster steht eine <b>farbige Zigbee-Lampe</b> hinter einem weißen Stoff, sodass das ganze Fenster gleichmäßig leuchtet.</li>
+      <li>Rundenbasiert statt Reaktionsspiel: Verzögerungen zwischen Handy und Lampe (≈ 0,5 s) spielen keine Rolle. Darum genügen normale Smart-Home-Lampen.</li>
+    </ul>
+    <h3>Spielregeln „Licht an im Rathaus“</h3>
+    <ul>
+      <li>Ziel: <b>alle 17 Fenster leuchten</b>. Jeder Zug (ein Fenster antippen) schaltet es <b>und seine direkten Nachbarn</b> um.</li>
+      <li>Jedes Rätsel ist lösbar: Es entsteht, indem das Programm vom „alles an“ rückwärts zufällige Züge macht. Daraus ergibt sich auch der Bestwert.</li>
+      <li>Levels werden schwerer (ein zufälliger Zug mehr pro Level). Bei Erfolg läuft eine Regenbogenwelle über die Fassade.</li>
+      <li><b>Ruhemodus „Malen“:</b> Ohne aktives Spiel darf jeder ein Fenster einfärben (1 Fenster pro Minute pro Handy). Nur Farben, keine Texte.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>2 · So funktioniert die Technik</h2>
+<div class="flow">
+  <div class="node"><b>Handy</b>QR-Code am Marktplatz scannen, Spielseite im Browser. Keine App, keine Anmeldung.</div>
+  <div class="arrow">→</div>
+  <div class="node"><b>Internet</b>Sicherer Tunnel (z. B. Cloudflare Tunnel) zum Pi. Kein eigener Server nötig.</div>
+  <div class="arrow">→</div>
+  <div class="node pi"><b>Raspberry Pi im Rathaus</b>Spiel-Logik (Node.js/Python), MQTT-Broker (Mosquitto), zigbee2mqtt. Spielt ohne Internet automatisch eine Licht-Show.</div>
+  <div class="arrow">→</div>
+  <div class="node"><b>Zigbee-Funk</b>USB-Stick am Pi. Die Lampen bilden ein Mesh-Netz durchs Haus.</div>
+  <div class="arrow">→</div>
+  <div class="node"><b>17 Lampen</b>fenster_01 … fenster_17, z. B. <span style="font-family:Menlo,monospace;font-size:7.4pt">{"state":"ON"}</span></div>
+</div>
+<p class="note">Immer nur eine Person spielt; weitere Handys sehen „Du bist als Nächstes dran“. Nach 90 s ohne Eingabe übernimmt der Malmodus. Es werden keine personenbezogenen Daten gespeichert.</p>
+
+<h2 class="pb">3 · Material</h2>
+
+<h3>A · Prototyp (Entwicklung und Test)</h3>
+<table>
+  <tr><th>Material</th><th>Zweck</th><th class="n">Menge</th><th class="n">ca. Kosten</th></tr>
+  <tr><td>Raspberry Pi 5 (4 GB), Netzteil 27 W, microSD 32 GB, Gehäuse</td><td>Spiel-Server, auch für die Installation</td><td class="n">1</td><td class="n">100 €</td></tr>
+  <tr><td>Zigbee-USB-Stick (z. B. SONOFF ZBDongle-E oder SMLIGHT SLZB-06) + USB-Verlängerung 1 m</td><td>Funk zu den Lampen; Verlängerung gegen USB-3-Störungen</td><td class="n">1</td><td class="n">30 €</td></tr>
+  <tr><td>Zigbee-Farblampen E27 (RGB, z. B. INNR, IKEA, Philips Hue)</td><td>Testlampen, zählen zu den 17</td><td class="n">4</td><td class="n">60–160 €</td></tr>
+  <tr><td>E27-Fassungen mit Kabel und Stecker</td><td>Lampen ohne Leuchte betreiben</td><td class="n">4</td><td class="n">25 €</td></tr>
+  <tr><td>Mini-Rathaus aus Pappe: ESP32-Board, LED-Streifen WS2812B (mind. 17 LEDs), Netzteil 5 V/3 A, Transparentpapier, Kabel</td><td>Tischmodell für Präsentation und Tests (Firmware WLED)</td><td class="n">1</td><td class="n">30 €</td></tr>
+  <tr><td>Laptop, Smartphone</td><td>Programmieren, Testen</td><td class="n">–</td><td class="n">vorhanden</td></tr>
+  <tr class="sum"><td colspan="3">Summe Prototyp</td><td class="n">ca. 245–345 €</td></tr>
+</table>
+
+<h3>B · Finale Installation im Alten Rathaus</h3>
+<table>
+  <tr><th>Material</th><th>Zweck / Hinweis</th><th class="n">Menge</th><th class="n">ca. Kosten</th></tr>
+  <tr><td>Zigbee-Farblampen E27 RGB (inkl. 4 aus dem Prototyp und 2 Ersatz)</td><td>Ein „Pixel“ je Fenster; nur ein Hersteller für gleiche Farben</td><td class="n">19</td><td class="n">285–950 €</td></tr>
+  <tr><td>Steh- oder Klemmleuchten mit E27 (alternativ Fassung + Stativ)</td><td>Lampe ca. 40 cm hinter dem Fenster, Richtung Glas</td><td class="n">17</td><td class="n">170–340 €</td></tr>
+  <tr><td>Diffusor: weißer Stoff, schwer entflammbar (B1), ca. 1,0 × 1,6 m, mit Klemmstange; kleiner für Gauben</td><td>Ganzes Fenster leuchtet statt eines Lichtpunkts</td><td class="n">17</td><td class="n">170 €</td></tr>
+  <tr><td>Zigbee-Zwischenstecker (Router)</td><td>Verstärkt das Funknetz zwischen den Etagen</td><td class="n">3</td><td class="n">35 €</td></tr>
+  <tr><td>Verlängerungskabel, Steckdosenleisten, Kabelbrücken, Gaffa-Tape</td><td>Strom in jedem Raum, keine Stolperfallen</td><td class="n">Set</td><td class="n">80 €</td></tr>
+  <tr><td>Internet: Gast-WLAN der Stadt <i>oder</i> LTE-Router + Prepaid-Daten</td><td>Verbindung für Spielseite und Fernwartung</td><td class="n">1</td><td class="n">0–60 €</td></tr>
+  <tr><td>QR-Schild A1 wetterfest (Alu-Dibond oder laminiert) mit Kurzanleitung</td><td>Am Marktplatz, Blickrichtung Fassade</td><td class="n">1–2</td><td class="n">40–80 €</td></tr>
+  <tr><td>Etiketten, Kabelbinder, Werkzeug, Leiter</td><td>Lampen nummerieren (01–17) wie im Programm</td><td class="n">Set</td><td class="n">20 €</td></tr>
+  <tr><td>Raspberry Pi + Zigbee-Stick</td><td>aus dem Prototyp</td><td class="n">1</td><td class="n">–</td></tr>
+  <tr class="sum"><td colspan="3">Summe Installation (zusätzlich zum Prototyp)</td><td class="n">ca. 800–1.750 €</td></tr>
+</table>
+<p class="note">Preise sind grobe Richtwerte (Stand Nov. 2026). Die Spanne hängt vor allem von der Lampenmarke ab. Laut Ausschreibung stellen Sponsoren, Schule und Partner die Hardware; diese Liste dient als Bestellgrundlage. Software ist kostenlos: Raspberry Pi OS, Mosquitto, zigbee2mqtt, Node.js oder Python, WLED, Cloudflare Tunnel.</p>
+
+<footer>Rathaus Lichtspiel · Konzept für den Hackathon „Pascal lights up the city“ 2027 · Fensterraster nach Foto der Fassade, vor Ort zu prüfen.</footer>
+</body>
+</html>
